@@ -13,10 +13,11 @@
         "outputPath": "dist/midapp",
         "index": "./src/index.html",
         "browser": "./src/main.ts",
-        "polyfills": ["zone.js", "src/polyfills.ts"],
+        "polyfills": ["zone.js", "./src/polyfills.ts"],
         "tsConfig": "./tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
         "assets": ["./src/favicon.ico", "./src/assets"],
-        "styles": ["./src/styles.css"],
+        "styles": ["@angular/material/prebuilt-themes/purple-green.css", "./src/styles.scss"],
         "scripts": []
       },
       "configurations": {
