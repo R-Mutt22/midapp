@@ -1,12 +1,4 @@
 {
-  "recommendations": [
-    "nrwl.angular-console",
-    "esbenp.prettier-vscode",
-    "firsttris.vscode-jest-runner"
-  ]
-}
-
-{
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
