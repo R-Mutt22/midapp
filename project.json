@@ -51,10 +51,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "buildTarget": "bob:build:production"
+          "buildTarget": "midapp:build:production"
         },
         "development": {
-          "buildTarget": "bob:build:development"
+          "buildTarget": "midapp:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -62,7 +62,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "bob:build"
+        "buildTarget": "midapp:build"
       }
     }
   }
