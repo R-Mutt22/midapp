@@ -39,9 +39,9 @@
     "@nx/angular:application": {
       "e2eTestRunner": "none",
       "linter": "eslint",
-      "style": "css",
+      "style": "scss",
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "midapp"
+  "defaultProject": "bob"
 }
