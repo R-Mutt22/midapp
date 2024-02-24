@@ -4,8 +4,6 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { createTransferInstructions } from '@heavy-duty/spl-utils';
 import { injectTransactionSender } from '@heavy-duty/wallet-adapter';
-import { PublicKey } from '@solana/web3.js';
-import { config } from './config';
 import {
   TransferFormComponent,
   TransferFormPayload,
@@ -52,21 +50,24 @@ export class TransferModalComponent {
       this.transactionStatus() === 'confirming' ||
       this.transactionStatus() === 'finalizing',
   );
+  shyftApiService: any;
 
   onSendTransfer(payload: TransferFormPayload) {
     this._matDialogRef.disableClose = true;
 
     this._transactionSender
-      .send(({ publicKey }) =>
-        createTransferInstructions({
-          sender: publicKey,
-          receiver: new PublicKey(payload.receiver),
-          mint: new PublicKey(config.mint),
+      .send(({ publicKey }) => {
+        const t = createTransferInstructions({
+          senderAddress: publicKey.toBase58(),
+          receiverAddress: payload.receiver,
+          mintAddress: this.shyftApiService.token,
           amount: payload.amount,
-          fundReceiver: true,
           memo: payload.memo,
-        }),
-      )
+          fundReceiver: true,
+        });
+        return t;
+      })
+
       .subscribe({
         next: (signature) => {
           console.log(
