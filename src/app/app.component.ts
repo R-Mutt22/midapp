@@ -13,7 +13,7 @@ import { TransferModalComponent } from './transfer-modal.component';
   selector: 'midapp-root',
   template: `
     <header class="pb-4 pt-16 relative">
-      <h1 class="text-5xl text-center mb-4">Hola, soy Bob.</h1>
+      <h1 class="text-5xl text-center mb-4">Hola, soy R Mutt.</h1>
 
       <div class="flex justify-center absolute top-4 right-4">
         <hd-wallet-multi-button></hd-wallet-multi-button>

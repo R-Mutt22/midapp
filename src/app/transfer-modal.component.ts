@@ -3,12 +3,16 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { createTransferInstructions } from '@heavy-duty/spl-utils';
-import { injectTransactionSender } from '@heavy-duty/wallet-adapter';
+import {
+  injectPublicKey,
+  injectTransactionSender,
+} from '@heavy-duty/wallet-adapter';
+import { computedAsync } from 'ngxtension/computed-async';
+import { ShyftApiService } from './shyft-api.service';
 import {
   TransferFormComponent,
   TransferFormPayload,
 } from './transfer-form.component';
-
 @Component({
   selector: 'midapp-transfer-modal',
   template: `
@@ -17,6 +21,7 @@ import {
 
       <midapp-transfer-form
         [disabled]="isRunning()"
+        [tokens]="allTokens() ?? []"
         (sendTransfer)="onSendTransfer($event)"
         (cancelTransfer)="onCancelTransfer()"
       ></midapp-transfer-form>
@@ -42,6 +47,8 @@ export class TransferModalComponent {
   private readonly _matDialogRef = inject(MatDialogRef);
   private readonly _matSnackBar = inject(MatSnackBar);
   private readonly _transactionSender = injectTransactionSender();
+  private readonly _publicKey = injectPublicKey();
+  private readonly _shyftApiService = inject(ShyftApiService);
 
   readonly transactionStatus = computed(() => this._transactionSender().status);
   readonly isRunning = computed(
@@ -50,23 +57,24 @@ export class TransferModalComponent {
       this.transactionStatus() === 'confirming' ||
       this.transactionStatus() === 'finalizing',
   );
-  shyftApiService: any;
+  readonly allTokens = computedAsync(() =>
+    this._shyftApiService.getAllTokens(this._publicKey()?.toBase58()),
+  );
 
   onSendTransfer(payload: TransferFormPayload) {
     this._matDialogRef.disableClose = true;
 
     this._transactionSender
-      .send(({ publicKey }) => {
-        const t = createTransferInstructions({
+      .send(({ publicKey }) =>
+        createTransferInstructions({
           senderAddress: publicKey.toBase58(),
           receiverAddress: payload.receiver,
-          mintAddress: this.shyftApiService.token,
+          mintAddress: payload.mintAddress,
           amount: payload.amount,
-          memo: payload.memo,
           fundReceiver: true,
-        });
-        return t;
-      })
+          memo: payload.memo,
+        }),
+      )
 
       .subscribe({
         next: (signature) => {
