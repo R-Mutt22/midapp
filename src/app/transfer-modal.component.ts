@@ -13,6 +13,7 @@ import {
   TransferFormComponent,
   TransferFormPayload,
 } from './transfer-form.component';
+
 @Component({
   selector: 'midapp-transfer-modal',
   template: `
@@ -75,7 +76,6 @@ export class TransferModalComponent {
           memo: payload.memo,
         }),
       )
-
       .subscribe({
         next: (signature) => {
           console.log(
